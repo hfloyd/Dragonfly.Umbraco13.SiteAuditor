@@ -1,0 +1,215 @@
+@inherits UmbracoViewPage<IEnumerable<AuditableDocType>>
+@*
+	Expected View Data:
+	-------------------
+	StandardInfo (object - StandardViewInfo)		: Version, Current environment, etc.
+	Status (object - StatusMessage)					: Status of operations
+
+*@
+@{
+	var paramStandardInfo = Mvc.GetSafeViewData(ViewData, "StandardInfo", new StandardViewInfo()) as StandardViewInfo;
+	var paramStatus = Mvc.GetSafeViewData(ViewData, "Status", new StatusMessage()) as StatusMessage;
+
+	IEnumerable<AuditableDocType> docTypes = Model.ToList();
+	//var propertyAlias = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "PropertyAlias");
+	// var includeUnpublished = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataBool(ViewData, "IncludeUnpublished");
+
+	var counter = 0;
+	var Title = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "Title", "All Document Types");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>@Title</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+	@*<style>
+		{
+
+		}
+		</style>*@
+	@*<!--<script src="/scripts/snippet-javascript-console.min.js?v=1"></script>-->*@
+</head>
+<body>
+	<div class="container-full" style="margin: 0 10px;">
+
+			<h1>@Title</h1>
+		<p>Total Document Types Returned: @docTypes.Count()</p>
+
+		<table id="umbracodata" class="table table-striped table-bordered table-hover table-sm" cellspacing="0" style="width: 100%;">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Actions</th>
+					<th>Doctype Name</th>
+					<th>Alias</th>
+					<th>Folder</th>
+					<th>Allowed Templates</th>
+					<th>Default Template</th>
+					<th>Allowed Children</th>
+					<th>Has Content Nodes?</th>
+					<th>Is an Element Type?</th>
+					<th>Is a Composition?</th>
+					<th>Compositions Used</th>
+					<th>Id</th>
+					<th>GUID</th>
+					<th>Create Date</th>
+					<th>Update Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var dt in docTypes)
+				{
+					counter++;
+
+					<tr>
+
+						@*// #*@
+						<td>@counter</td>
+
+						@*//Actions*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/SchemaActions.cshtml", dt.Id, new ViewDataDictionary(ViewData)
+						{
+						{"EntityType", "DocType" }
+						});
+							}
+						</td>
+
+						@*//Name*@
+						<td>@dt.Name</td>
+
+						@*//Alias*@
+						<td>@dt.Alias</td>
+
+						@*//Folder*@
+						<td>@dt.PathAsText</td>
+
+						@*//Allowed Templates*@
+
+						@if (dt.AllowedTemplates.Any())
+						{
+							<td>@Html.Raw(string.Join(" <br/> ", dt.AllowedTemplates.Select(n => $"{n.Value} [{n.Key}]")))</td>
+						}
+						else
+						{
+							<td>~NONE~</td>
+						}
+
+						@*//Default Template*@
+						<td>@dt.DefaultTemplateName</td>
+
+						@*//Allowed Children*@
+
+						@if (dt.ContentType.AllowedContentTypes.Any())
+						{
+							<td>@Html.Raw(string.Join(" <br/> ", dt.ContentType.AllowedContentTypes.Select(n => $"{n.Alias}")))</td>
+						}
+						else
+						{
+							<td>~NONE~</td>
+						}
+
+						@*//Has Content Nodes?*@
+						<td>@dt.HasContentNodes</td>
+
+						@*//Is an Element Type?*@
+						<td>@dt.IsElement</td>
+
+						@*//Is a Composition?*@
+						<td>@dt.IsComposition</td>
+
+						@*//Compositions Used*@
+						@if (dt.CompositionsUsed.Any())
+						{
+							<td>@Html.Raw(string.Join(" <br/> ", dt.CompositionsUsed.Select(n => $"{n.Value} [{n.Key}]")))</td>
+						}
+						else
+						{
+							<td>~NONE~</td>
+						}
+
+						@*// ID*@
+						<td>@dt.Id</td>
+
+						@*// GUID*@
+						<td>@dt.Guid.ToString()</td>
+
+						@* //Create Date*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", dt.ContentType.CreateDate);
+							}
+						</td>
+
+						@*//Date Last Updated*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", dt.ContentType.UpdateDate);
+							}
+						</td>
+
+					</tr>
+				}
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>#</td>
+					<td>Actions</td>
+					<th>Name</th>
+					<th>Alias</th>
+					<th>Folder</th>
+					<th>Allowed Templates</th>
+					<th>Default Templates</th>
+					<th>Allowed Children</th>
+					<th>Has Nodes</th>
+					<th>Is Element</th>
+					<th>Is Comp</th>
+					<th>Comps Used</th>
+					<th>Id</th>
+					<th>GUID</th>
+					<th>Create Date</th>
+					<th>Update Date</th>
+				</tr>
+			</tfoot>
+		</table>
+
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+		 // Setup - add a text input to each footer cell
+		 $('#umbracodata tfoot th').each( function () {
+		  var title = $(this).text();
+		  $(this).html( '<input type="text" style="font-size:10px; width:100%;" placeholder="Search '+title+'" />' );
+		 } );
+
+		 // DataTable
+		 $('#umbracodata').DataTable({
+		  initComplete: function () {
+		   // Apply the search
+		   this.api().columns().every( function () {
+		 var that = this;
+
+		 $( 'input', this.footer() ).on( 'keyup change clear', function () {
+		  if ( that.search() !== this.value ) {
+		   that
+		 .search( this.value )
+		 .draw();
+		  }
+		 } );
+		   } );
+		  }
+		 });
+
+		});
+	</script>
+</body>
+</html>

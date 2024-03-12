@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
+  <area alias="dashboardTabs">
+    <key alias="Dragonfly.SiteAuditor">Site Auditor</key>
+  </area>
+  <area alias="SiteAuditor">
+    <key alias="SiteAuditor">Dragonfly Site Auditor</key>
+    <key alias="GetStarted">Get Started</key>
+    <key alias="Instructions"></key>
+    <key alias="Note">NOTE:</key>
+    <key alias="NoteDetails">Some of these will take a long time to run for large sites. Please be patient.<br/>
+      The HTML option is interactive and searchable.</key>
+
+    <key alias="Content">Content</key>
+    <key alias="DocumentTypes">Document Types</key>
+    <key alias="DataTypes">Data Types</key>
+    <key alias="AdditionalReports">Additional Reports</key>
+    <!--  <key alias="Note">NOTE</key>-->
+
+    <key alias="MoreInfo">For more information and updates</key>
+  </area>
+</language>

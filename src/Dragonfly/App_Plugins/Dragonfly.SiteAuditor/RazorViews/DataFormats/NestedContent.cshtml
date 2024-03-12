@@ -1,0 +1,51 @@
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq
+@inherits UmbracoViewPage<IProperty>
+
+@{
+	var value = Model.GetValue(); //Should be a nested content JSON string
+
+	if (value != null)
+	{
+		var json = value.ToString();
+
+		var items = JsonConvert.DeserializeObject<IEnumerable<JObject>>(value.ToString()).ToList();
+
+		if (items.Any())
+		{
+		 <ol>
+				@foreach (JObject item in items)
+				{
+					string name = (string)item["name"];
+					@*var definition =new { name = "", ncContentTypeAlias= "" };
+						var data = JsonConvert.DeserializeAnonymousType(item, definition); @data.name*@
+
+			  <li>
+			   <span>@name</span>
+			   <textarea rows="2" cols="60">@json</textarea>
+			  </li>
+				}
+		 </ol>
+		}
+
+
+		@*JsonTextReader reader = new JsonTextReader(new StringReader(json));
+			while (reader.Read())
+			{
+			if (reader.Value != null)
+			{
+			Console.WriteLine("Token: {0}, Value: {1}", reader.TokenType, reader.Value);
+			}
+			else
+			{
+			Console.WriteLine("Token: {0}", reader.TokenType);
+			}
+			}*@
+
+		@*<textarea rows="3" cols="100">@json</textarea>*@
+	}
+	else
+	{
+	 <i>(No items added)</i>
+	}
+}

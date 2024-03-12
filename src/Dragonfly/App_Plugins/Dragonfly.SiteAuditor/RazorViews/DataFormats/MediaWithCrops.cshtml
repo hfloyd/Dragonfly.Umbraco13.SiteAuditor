@@ -1,0 +1,36 @@
+@inherits UmbracoViewPage<IEnumerable<MediaWithCrops>>
+@{
+	//IPublishedProperty property = Model;
+	IEnumerable<MediaWithCrops> medias = Model;
+	//var fancyFormat = Mvc.GetSafeViewDataBool(ViewData, "FancyFormat", true);
+	//var imageWidth = Mvc.GetSafeViewDataInt(ViewData, "ImageWidth", 300);
+	//var umbracoHelper = Current.UmbracoHelper;
+
+	foreach (var media in medias)
+	{
+		IPublishedContent iPubMedia = media.Content;
+		Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/MediaIPub.cshtml", iPubMedia, ViewData);
+	}
+
+}
+@functions
+{
+	bool IsImage(IPublishedContent IPub)
+	{
+		var imgTypes = new List<string>()
+	{
+		{".png"}
+		,{".jpg"}
+		,{".jpeg"}
+		,{".gif"}
+		,{".svg"}
+	};
+
+		var extension = IPub.Value<string>("umbracoExtension");
+		if (imgTypes.Contains(extension))
+		{ return true; }
+
+		return false;
+	}
+}
+

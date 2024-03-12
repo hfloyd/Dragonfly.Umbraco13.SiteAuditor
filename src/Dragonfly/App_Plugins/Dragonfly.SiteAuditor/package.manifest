@@ -1,0 +1,11 @@
+﻿{
+"dashboards":  [
+        {
+            "alias": "Dragonfly.SiteAuditor",
+            "view":  "~/App_Plugins/Dragonfly.SiteAuditor/dashboard.html",
+            "sections":  [ "settings" ],
+            "weight":30
+        }
+    ]
+
+}

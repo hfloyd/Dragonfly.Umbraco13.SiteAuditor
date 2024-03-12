@@ -1,0 +1,10 @@
+@inherits UmbracoViewPage<NodePropertyDataTypeInfo>
+
+@if (Model.UsesComposition)
+{
+    <span>@Model.DocTypeAlias [@Model.DocTypeCompositionAlias]</span>
+}
+else
+{
+    <span>@Model.DocTypeAlias</span>
+}

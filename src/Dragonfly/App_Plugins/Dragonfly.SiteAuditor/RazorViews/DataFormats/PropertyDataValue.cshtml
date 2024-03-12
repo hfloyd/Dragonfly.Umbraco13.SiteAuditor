@@ -1,0 +1,185 @@
+@inject ILogger<UmbracoViewPage> CurrentLogger
+@inject SiteAuditorService AuditorService
+@using Newtonsoft.Json
+@inherits UmbracoViewPage<NodePropertyDataTypeInfo>
+@{
+	NodePropertyDataTypeInfo nodePropertyDataTypeInfo = Model;
+	HtmlString formattedValue = new HtmlString("");
+	var renderingDone = false;
+
+	var viewDD = new ViewDataDictionary(ViewData);
+
+	var paramHighlights = Mvc.GetSafeViewData(ViewData, "HighlightText", new List<string>()) as List<string>;
+
+	try
+	{
+		var editor = nodePropertyDataTypeInfo.DataType != null ? nodePropertyDataTypeInfo.DataType.EditorAlias : "";
+		var dbType = nodePropertyDataTypeInfo.DataType != null ? nodePropertyDataTypeInfo.DataType.DatabaseType : ValueStorageType.Ntext;
+
+		//Special handling based on editor
+		switch (editor)
+		{
+			case "Umbraco.NestedContent":
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/NestedContent.cshtml", nodePropertyDataTypeInfo.Property, viewDD);
+				renderingDone = true;
+				break;
+
+			case "Our.Umbraco.NestedContent":
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/NestedContent.cshtml", nodePropertyDataTypeInfo.Property, viewDD);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.MultiNodeTreePicker":
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/Mntp.cshtml", nodePropertyDataTypeInfo.Property, viewDD);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.MultiNodeTreePicker2":
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/Mntp.cshtml", nodePropertyDataTypeInfo.Property, viewDD);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.ContentPicker":
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/ContentPicker.cshtml", nodePropertyDataTypeInfo.Property, viewDD);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.ContentPicker2":
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/ContentPicker.cshtml", nodePropertyDataTypeInfo.Property, viewDD);
+				renderingDone = true;
+				break;
+
+			case "Tags": //TODO: Fix such that Node Tags data is passed-in.
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/Tags.cshtml", nodePropertyDataTypeInfo.PropertyData, viewDD);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.MediaPicker":
+				var errorMsg = "";
+				var medias = AuditorService.GetMediaListFromPropValue("Umbraco.MediaPicker",
+					nodePropertyDataTypeInfo.Property.Values, out errorMsg);
+
+				//RENDER
+				RenderMediaData(medias, errorMsg, nodePropertyDataTypeInfo.PropertyData);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.MediaPicker2":
+				var errorMsg2 = "";
+				var medias2 = AuditorService.GetMediaListFromPropValue("Umbraco.MediaPicker2",
+					nodePropertyDataTypeInfo.Property.Values, out errorMsg2);
+
+				//RENDER
+				RenderMediaData(medias2, errorMsg2, nodePropertyDataTypeInfo.PropertyData);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.MediaPicker3":
+				var errorMsg3 = "";
+				var medias3 = AuditorService.GetMediaListFromPropValue("Umbraco.MediaPicker3",
+					nodePropertyDataTypeInfo.Property.Values, out errorMsg3);
+
+				//RENDER
+				RenderMediaData(medias3, errorMsg3, nodePropertyDataTypeInfo.PropertyData);
+				renderingDone = true;
+				break;
+
+			case "Umbraco.Grid":
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/GridRaw.cshtml", nodePropertyDataTypeInfo.Property, viewDD);
+				renderingDone = true;
+				break;
+		}
+
+		//If we get here, handle based on DB type
+		if (!renderingDone)
+		{
+			switch (dbType)
+			{
+				case ValueStorageType.Date:
+					Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", nodePropertyDataTypeInfo.Property.GetValue(), viewDD);
+					renderingDone = true;
+					break;
+
+				//case ValueStorageType.Decimal:
+				//    formattedValue = new HtmlString(nodePropertyDataTypeInfo.Property.GetValue().ToString());
+				//    break;
+
+				//case ValueStorageType.Integer:
+				//    formattedValue = new HtmlString(nodePropertyDataTypeInfo.Property.GetValue().ToString());
+				//    break;
+
+				//case ValueStorageType.Nvarchar:
+				//    formattedValue = new HtmlString(nodePropertyDataTypeInfo.Property.GetValue().ToString());
+				//    break;
+
+				//case ValueStorageType.Ntext:
+				//    formattedValue = new HtmlString(nodePropertyDataTypeInfo.Property.GetValue().ToString());
+				//    break;
+
+				default:
+					//Default rendering
+					if (nodePropertyDataTypeInfo.Property != null)
+					{
+						var valueString = nodePropertyDataTypeInfo.Property.GetValue() != null ? nodePropertyDataTypeInfo.Property.GetValue().ToString() : "";
+
+						if (paramHighlights != null && paramHighlights.Any())
+						{
+							<span class="highlighted">@AuditorInfoService.HighlightText(valueString, paramHighlights)</span>
+						}
+						else
+						{
+							<span>@valueString</span>
+						}
+					}
+					renderingDone = true;
+					break;
+			}
+
+		}
+	}
+	catch (Exception e)
+	{
+		var msg = $"Error in 'PropertyDataValue.cshtml' for Node #{nodePropertyDataTypeInfo.NodeId} - DocType:{nodePropertyDataTypeInfo.DocTypeAlias} & Property: {nodePropertyDataTypeInfo.Property.Alias} with Value: {JsonConvert.SerializeObject(nodePropertyDataTypeInfo.PropertyData)} (Type: {nodePropertyDataTypeInfo.PropertyData.GetType()})";
+		CurrentLogger.LogError(e, msg);
+
+		<div class="error"><small>@msg</small></div>
+	}
+}
+@functions {
+
+	private void RenderMediaData(List<IPublishedContent> MediaItems, string ErrorMsg, object PropertyData)
+	{
+		var mediaImageVdd = new ViewDataDictionary(ViewData);
+		mediaImageVdd.Add("ImageWidth", 300);
+		mediaImageVdd.Add("ImageHeight", 300);
+
+		if (!string.IsNullOrEmpty(ErrorMsg))
+		{
+			<div><small>[Error getting Media: @ErrorMsg]</small></div>
+		}
+		if (MediaItems.Any())
+		{
+			foreach (var media in MediaItems)
+			{
+				Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/MediaIPub.cshtml",
+					media, mediaImageVdd);
+			}
+		}
+		else
+		{
+			//No values
+			<div><small>[NO IMAGE(S) SELECTED]</small></div>
+		}
+
+		if (PropertyData is not null)
+		{
+			<div><small><i>Raw Data:</i> @PropertyData.ToString()</small></div>
+		}
+		else
+		{
+			<div><small><i>Raw Data:</i> NULL</small></div>
+		}
+	}
+
+}
+

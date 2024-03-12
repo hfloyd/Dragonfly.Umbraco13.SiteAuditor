@@ -1,0 +1,201 @@
+@inherits UmbracoViewPage<IEnumerable<AuditableTemplate>>
+@*
+	Expected View Data:
+	-------------------
+	StandardInfo (object - StandardViewInfo)		: Version, Current environment, etc.
+	Status (object - StatusMessage)					: Status of operations
+
+*@
+@{
+	var paramStandardInfo = Mvc.GetSafeViewData(ViewData, "StandardInfo", new StandardViewInfo()) as StandardViewInfo;
+	var paramStatus = Mvc.GetSafeViewData(ViewData, "Status", new StatusMessage()) as StatusMessage;
+
+	IEnumerable<AuditableTemplate> templates = Model.ToList();
+	//var propertyAlias = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "PropertyAlias");
+	// var includeUnpublished = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataBool(ViewData, "IncludeUnpublished");
+
+	var counter = 0;
+	var Title = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "Title", "All Templates");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>@Title</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+	@*<style>
+		{
+
+		}
+		</style>*@
+	@*<!--<script src="/scripts/snippet-javascript-console.min.js?v=1"></script>-->*@
+</head>
+<body>
+	<div class="container-full" style="margin: 0 10px;">
+
+			<h1>@Title</h1>
+		<p>Total Templates Returned: @templates.Count()</p>
+
+		<table id="umbracodata" class="table table-striped table-bordered table-hover table-sm" cellspacing="0" style="width: 100%;">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Actions</th>
+					<th>Template Name</th>
+					<th>Alias</th>
+					<th>Folder</th>
+					<th>Is Master</th>
+					<th>Has Master</th>
+					<th>Code Length</th>
+					<th>Allowed On Types</th>
+					<th>Is Default For</th>
+					<th>Used on Content</th>
+					<th>Id</th>
+					<th>GUID</th>
+					<th>Create Date</th>
+					<th>Update Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var temp in templates)
+				{
+					counter++;
+
+					<tr>
+						@*// #*@
+						<td>@counter</td>
+
+						@*//Actions*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/SchemaActions.cshtml", temp.Id, new ViewDataDictionary(ViewData)
+						{
+						{"EntityType", "Template" }
+						});
+							}
+						</td>
+
+						@*//Name*@
+						<td>@temp.Name</td>
+
+						@*//Alias*@
+						<td>@temp.Alias</td>
+
+						@*//Folder*@
+						<td>@temp.PathAsText</td>
+
+						@*//Is Master*@
+						<td>@temp.IsMaster</td>
+
+						@*//Has Master*@
+						<td>@temp.HasMaster</td>
+
+						@*//Code Length*@
+						<td>@temp.CodeLength</td>
+
+						@*//Allowed On Types*@
+						@if (temp.IsAllowedOn.Any())
+						{
+							var itemsAllowed = temp.IsAllowedOn.Select(n => $"{n.Alias} [{n.Id}]");
+							<td>@Html.Raw(string.Join(" <br/> ",itemsAllowed ))</td>
+						}
+						else
+						{
+							<td>~NONE~</td>
+						}
+						@*//Is Default for*@
+						@if (temp.DefaultTemplateFor.Any())
+						{
+							var itemsDefault = temp.IsAllowedOn.Select(n => $"{n.Alias} [{n.Id}]");
+							<td>@Html.Raw(string.Join(" <br/> ", itemsDefault))</td>
+						}
+						else
+						{
+							<td>~NONE~</td>
+						}
+
+						@*//Used on Content*@
+						<td>@temp.UsedOnContent</td>
+
+						@*// ID*@
+						<td>@temp.Id</td>
+
+						@*// GUID*@
+						<td>@temp.Guid.ToString()</td>
+
+						@* //Create Date*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", temp.CreateDate);
+							}
+						</td>
+
+						@*//Date Last Updated*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", temp.UpdateDate);
+							}
+						</td>
+
+					</tr>
+				}
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>#</td>
+					<td>Actions</td>
+					<th>Template Name</th>
+					<th>Alias</th>
+					<th>Folder</th>
+					<th>Is Master</th>
+					<th>Has Master</th>
+					<th>Code Length</th>
+					<th>Allowed On Types</th>
+					<th>Is Default For</th>
+					<th>Used on Content</th>
+					<th>Id</th>
+					<th>GUID</th>
+					<th>Create Date</th>
+					<th>Update Date</th>
+				</tr>
+			</tfoot>
+		</table>
+
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+		 // Setup - add a text input to each footer cell
+		 $('#umbracodata tfoot th').each( function () {
+		  var title = $(this).text();
+		  $(this).html( '<input type="text" style="font-size:10px; width:100%;" placeholder="Search '+title+'" />' );
+		 } );
+
+		 // DataTable
+		 $('#umbracodata').DataTable({
+		  initComplete: function () {
+		   // Apply the search
+		   this.api().columns().every( function () {
+		 var that = this;
+
+		 $( 'input', this.footer() ).on( 'keyup change clear', function () {
+		  if ( that.search() !== this.value ) {
+		   that
+		 .search( this.value )
+		 .draw();
+		  }
+		 } );
+		   } );
+		  }
+		 });
+
+		});
+	</script>
+</body>
+</html>

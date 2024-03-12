@@ -1,0 +1,231 @@
+@inherits UmbracoViewPage<IEnumerable<AuditableContent>>
+@*
+	Expected View Data:
+	-------------------
+	StandardInfo (object - StandardViewInfo)		: Version, Current environment, etc.
+	Status (object - StatusMessage)					: Status of operations
+
+*@
+@{
+	var paramStandardInfo = Mvc.GetSafeViewData(ViewData, "StandardInfo", new StandardViewInfo()) as StandardViewInfo;
+	var paramStatus = Mvc.GetSafeViewData(ViewData, "Status", new StatusMessage()) as StatusMessage;
+	var propertyAlias = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "PropertyAlias");
+	var includeUnpublished = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataBool(ViewData, "IncludeUnpublished");
+
+	IEnumerable<AuditableContent> contentList = Model.ToList();
+
+	var counter = 0;
+	var requestUri = Dragonfly.NetHelpers.Urls.CurrentRequestUri(Context.Request);
+	var filterdByDoctype = Dragonfly.NetHelpers.Urls.GetSafeQueryStringValue<string>(requestUri, "DocTypeAlias", "");
+	var Title = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "Title", "All Content");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>@Title</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+	@*<style>
+	{
+
+	}
+	</style>*@
+	@*<!--<script src="/scripts/snippet-javascript-console.min.js?v=1"></script>-->*@
+</head>
+<body>
+	<div class="container-full" style="margin: 0 10px;">
+
+			<h1>@Title</h1>
+		@if (filterdByDoctype != "")
+		{
+			<h2>Pages of type '@filterdByDoctype' Only</h2>
+		}
+		<p>Total Nodes Returned: @contentList.Count()</p>
+
+		<table id="umbracodata" class="table table-striped table-bordered table-hover table-sm" cellspacing="0" style="width:100%">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Actions</th>
+					<th>Node Name</th>
+					<th>NodeID</th>
+					<th>Node Path</th>
+					<th>DocType</th>
+					<th>ParentID</th>
+					<th>Full URL</th>
+					<th>Level</th>
+					<th>Sort Order</th>
+					<th>Assigned Template</th>
+					<th>Create Date</th>
+					<th>Create User</th>
+					<th>Update Date</th>
+					<th>Update User</th>
+					<th>UDI</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var node in contentList)
+				{
+					counter++;
+					//var dtInfo = AuditorInfoService.GetPropertyDataTypeInfo( propertyAlias, node.UmbPublishedNode);
+
+					<tr>
+
+						@*  // # *@
+						<td>@counter</td>
+
+						@* //Actions*@
+						<td>
+							@try
+							{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/NodeActions.cshtml", node);
+							}
+							catch (Exception e)
+							{
+								<span>Error on Node # @node.UmbContentNode.Id : @e.Message</span>
+							}
+						</td>
+
+
+						@* //Node Name*@
+						<td>@node.UmbContentNode.Name</td>
+
+						@* //Node ID*@
+						<td>@node.UmbContentNode.Id</td>
+
+						@* //Node Path*@
+						<td>@node.NodePathAsText</td>
+
+						@* //DocType*@
+						<td>@node.UmbContentNode.ContentType.Alias</td>
+
+						@* //ParentID*@
+						<td>@node.UmbContentNode.ParentId</td>
+
+						@* //Full URL*@
+						<td>
+							@if (node.IsPublished)
+							{
+								<small><a href="@node.FullNiceUrl" target="_blank">@node.FullNiceUrl</a></small>
+							}
+							else
+							{
+								<span>UNPUBLISHED</span>
+							}
+						</td>
+
+						@* //Level*@
+						<td>@node.UmbContentNode.Level</td>
+
+						@* //Sort Order*@
+						<td>@node.UmbContentNode.SortOrder</td>
+
+						@* //Template Name*@
+						<td>@node.TemplateAlias</td>
+
+						@* //Create Date*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", node.UmbContentNode.CreateDate);
+							}
+						</td>
+
+						@* //Create User *@
+						<td>
+							@if (node.CreateUser != null)
+							{
+								<text>@node.CreateUser.Name</text>
+								<br />
+								<small>@node.CreateUser.Username</small>
+							}
+							else
+							{
+								<text>UNKNOWN</text>
+							}
+						</td>
+
+						@*//Date Last Updated*@
+						<td>
+							@{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", node.UmbContentNode.UpdateDate);
+							}
+						</td>
+
+						@* //Update User *@
+						<td>
+							@if (node.UpdateUser != null)
+							{
+								<text>@node.UpdateUser.Name</text>
+								<br />
+								<small>@node.UpdateUser.Username</small>
+							}
+							else
+							{
+								<text>UNKNOWN</text>
+							}
+						</td>
+
+						@* //Node UDI*@
+						<td><small>@node.UmbContentNode.GetUdi()</small></td>
+					</tr>
+				}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>#</td>
+					<td>Actions</td>
+					<th>Name</th>
+					<th>ID</th>
+					<th>Path</th>
+					<th>DocType</th>
+					<th>ParentID</th>
+					<td>URL</td>
+					<td>Level</td>
+					<td>Order</td>
+					<th>Template</th>
+					<th>Create Date</th>
+					<th>Create User</th>
+					<th>Update Date</th>
+					<th>Update User</th>
+					<td>UDI</td>
+				</tr>
+			</tfoot>
+		</table>
+
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			// Setup - add a text input to each footer cell
+			$('#umbracodata tfoot th').each(function () {
+				var title = $(this).text();
+				$(this).html('<input type="text" style="font-size:10px; width:100%;" placeholder="Search ' + title + '" />');
+			});
+
+			// DataTable
+			$('#umbracodata').DataTable({
+				initComplete: function () {
+					// Apply the search
+					this.api().columns().every(function () {
+						var that = this;
+
+						$('input', this.footer()).on('keyup change clear', function () {
+							if (that.search() !== this.value) {
+								that
+									.search(this.value)
+									.draw();
+							}
+						});
+					});
+				}
+			});
+
+		});
+	</script>
+</body>
+</html>

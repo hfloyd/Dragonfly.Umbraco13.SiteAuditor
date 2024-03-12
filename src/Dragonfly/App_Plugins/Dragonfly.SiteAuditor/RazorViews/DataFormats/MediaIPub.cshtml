@@ -1,0 +1,54 @@
+@inherits UmbracoViewPage<IPublishedContent>
+
+@{
+    IPublishedContent iPubMedia = Model;
+    var fancyFormat = Mvc.GetSafeViewDataBool(ViewData, "FancyFormat", true);
+    var imageWidth = Mvc.GetSafeViewDataInt(ViewData, "ImageWidth", 300);
+    var imageHeight = Mvc.GetSafeViewDataInt(ViewData, "ImageHeight", 300);
+    
+    if (iPubMedia.Url() != "")
+    {
+        if (fancyFormat)
+        {
+	        var errMedia = "";
+            var mediaPath = Development.MediaPath(iPubMedia,MediaService, out errMedia);
+            if (IsImage(iPubMedia))
+            {
+                var mediaUrl = $"{iPubMedia.Url()}?width={imageWidth}&height={imageHeight}&rmode=max";
+                <img src="@mediaUrl" />
+            }
+            <div>@mediaPath</div>
+            <div><small>@iPubMedia.Url()</small></div>
+        }
+        else
+        {
+            @iPubMedia.Url()
+        }
+    }
+    else
+    {
+        <i>none</i>
+    }
+
+}
+@functions
+{
+    bool IsImage(IPublishedContent IPub)
+    {
+        var imgTypes = new List<string>()
+    {
+            {"png"}
+            ,{"jpg"}
+            ,{"jpeg"}
+            ,{"gif"}
+            ,{"svg"}
+        };
+
+        var extension = IPub.Value<string>("umbracoExtension");
+        if (imgTypes.Contains(extension))
+        { return true; }
+
+        return false;
+    }
+}
+

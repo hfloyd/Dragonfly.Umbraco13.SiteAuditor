@@ -1,0 +1,158 @@
+@inherits UmbracoViewPage<IEnumerable<AuditableProperty>>
+@*
+	Expected View Data:
+	-------------------
+	StandardInfo (object - StandardViewInfo)		: Version, Current environment, etc.
+	Status (object - StatusMessage)					: Status of operations
+
+*@
+@{
+	var paramStandardInfo = Mvc.GetSafeViewData(ViewData, "StandardInfo", new StandardViewInfo()) as StandardViewInfo;
+	var paramStatus = Mvc.GetSafeViewData(ViewData, "Status", new StatusMessage()) as StatusMessage;
+
+	IEnumerable<AuditableProperty> propsList = Model.ToList();
+	var Title = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "Title", "All Properties");
+
+	@* var fancyFormat = true;
+		var propertyAlias = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "PropertyAlias");
+		var includeUnpublished = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataBool(ViewData, "IncludeUnpublished");
+	*@
+	var counter = 0;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>@Title</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+	@*<style>
+		{
+
+		}
+		</style>*@
+	@*<!--<script src="/scripts/snippet-javascript-console.min.js?v=1"></script>-->*@
+</head>
+<body>
+	<div class="container-full" style="margin: 0 10px;">
+
+		<h1>@Title</h1>
+		<p>Total Returned: @propsList.Count()</p>
+
+		<table id="umbracodata" class="table table-striped table-bordered table-hover table-sm" cellspacing="0" style="width: 100%;">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Property Name</th>
+					<th>Property Alias</th>
+					<th>Composition</th>
+					<th>Group</th>
+					<th>DataType Name</th>
+					<th>DataType Property Editor</th>
+					<th>DataType Database Type</th>
+					<th>Qty of DocumentTypes</th>
+					<th>DocumentTypes Used In</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var prop in propsList)
+				{
+					counter++;
+					<tr>
+						@*  // #*@
+						<td>@counter</td>
+
+						@*//Property Name*@
+						<td>@prop.UmbPropertyType.Name</td>
+
+						@*//Property Alias*@
+						<td>@prop.UmbPropertyType.Alias</td>
+
+						@*//Composition*@
+						<td>@prop.InComposition</td>
+
+						@*//Group*@
+						<td>@prop.GroupName</td>
+
+						@*//DataType Name*@
+						<td>@prop.DataType.Name</td>
+
+						@*//DataType Property Editor*@
+						<td>@prop.DataType.EditorAlias</td>
+
+						@*//DataType Database Type*@
+						<td>@prop.DataType.DatabaseType</td>
+
+						@*//Qty of DocumentTypes*@
+						<td>@prop.AllDocTypes.Count()</td>
+
+						@*//DocumentTypes Used In*@
+						<td>
+							@foreach (var docType in prop.AllDocTypes)
+							{
+								Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/SchemaActions.cshtml", docType.Id, 
+									new ViewDataDictionary(ViewData)
+									{
+									{"EntityType", "DocType" },
+									{"LinkTitle", $"{docType.DocTypeAlias}" }
+									});
+								<br/>
+							}
+						</td>
+
+					</tr>
+				}
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>#</td>
+					<th>Property Name</th>
+					<th>Property Alias</th>
+					<th>Composition</th>
+					<th>Group</th>
+					<th>DataType Name</th>
+					<th>DataType Property Editor</th>
+					<th>DataType Database Type</th>
+					<th>Qty of DocumentTypes</th>
+					<th>DocumentTypes Used In</th>
+				</tr>
+			</tfoot>
+		</table>
+
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+		 // Setup - add a text input to each footer cell
+		 $('#umbracodata tfoot th').each( function () {
+		  var title = $(this).text();
+		  $(this).html( '<input type="text" style="font-size:10px; width:100%;" placeholder="Search '+title+'" />' );
+		 } );
+
+		 // DataTable
+		 $('#umbracodata').DataTable({
+		  initComplete: function () {
+		   // Apply the search
+		   this.api().columns().every( function () {
+		 var that = this;
+
+		 $( 'input', this.footer() ).on( 'keyup change clear', function () {
+		  if ( that.search() !== this.value ) {
+		   that
+		 .search( this.value )
+		 .draw();
+		  }
+		 } );
+		   } );
+		  }
+		 });
+
+		});
+	</script>
+</body>
+</html>

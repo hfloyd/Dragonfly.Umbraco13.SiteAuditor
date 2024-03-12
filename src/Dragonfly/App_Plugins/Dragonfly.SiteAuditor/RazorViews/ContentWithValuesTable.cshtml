@@ -1,0 +1,223 @@
+@inherits UmbracoViewPage<IEnumerable<AuditableContent>>
+@*
+	Expected View Data:
+	-------------------
+	StandardInfo (object - StandardViewInfo)		: Version, Current environment, etc.
+	Status (object - StatusMessage)					: Status of operations
+
+*@
+@{
+	var paramStandardInfo = Mvc.GetSafeViewData(ViewData, "StandardInfo", new StandardViewInfo()) as StandardViewInfo;
+	var paramStatus = Mvc.GetSafeViewData(ViewData, "Status", new StatusMessage()) as StatusMessage;
+
+	IEnumerable<AuditableContent> contentList = Model.ToList();
+	var propertyAlias = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "PropertyAlias");
+	// var includeUnpublished = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataBool(ViewData, "IncludeUnpublished");
+
+
+	var counter = 0;
+	var Title = Dragonfly.UmbracoHelpers.Mvc.GetSafeViewDataString(ViewData, "Title", $"Nodes with Values for Property '{@propertyAlias}'");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>@Title</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+	@*<style>
+		{
+
+		}
+		</style>*@
+	@*<!--<script src="/scripts/snippet-javascript-console.min.js?v=1"></script>-->*@
+</head>
+<body>
+<div class="container-full" style="margin: 0 10px;">
+
+		<h1>@Title</h1>
+			<p>Total Nodes Returned: @contentList.Count()</p>
+
+	<table id="umbracodata" class="table table-striped table-bordered table-hover table-sm" cellspacing="0" style="width: 100%;">
+		<thead>
+		<tr>
+			<th>#</th>
+			<th>Actions</th>
+			<th>"@propertyAlias" Data Type</th>
+			<th>DocType</th>
+			<th>Node ID</th>
+			<th>Node Path</th>
+			<th>Is Published?</th>
+			<th>"@propertyAlias" Value</th>
+			<th> Value Length</th>
+			<th> Has Value</th>
+			@* <th>Value Model Type</th>*@
+			<th>Date Last Updated</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var node in contentList)
+		{
+			counter++;
+			var dtInfo = AuditorInfoService.GetPropertyDataTypeInfo(propertyAlias, node.UmbContentNode);
+			<tr>
+
+				@*  // #*@
+				<td>@counter</td>
+
+				@*  //Actions*@
+				<td>
+					@{
+						Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/NodeActions.cshtml", node);
+					}
+				</td>
+						
+				@*//PropertyAlias Type*@
+				<td>
+					@{
+						Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/PropertyTypeInfo.cshtml", dtInfo);
+					}
+				</td>
+
+				@*//DocType*@
+				<td>
+					@{
+						Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DocTypeInfo.cshtml", dtInfo);
+					}
+				</td>
+
+				@*//Node ID*@
+				<td>@node.UmbContentNode.Id</td>
+
+				@*//Node Path*@
+				<td>@node.NodePathAsCustomText()</td>
+
+				@*//Is Published?*@
+				<td>@node.IsPublished</td>
+
+				@*//PropertyAlias Value*@
+				@if (dtInfo.DataType != null)
+				{
+					<td>
+						@{
+							Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/PropertyDataValue.cshtml", dtInfo);
+						}
+					</td>
+						
+				}
+				else
+				{
+					var propVal = node.UmbContentNode.GetValue<string>(propertyAlias);
+					<td>@propVal</td>
+				}
+
+				@*//Value Length*@
+				<td>@if(node.UmbContentNode.HasPropertyValue(propertyAlias) & dtInfo.PropertyData!=null)
+				    { @dtInfo.PropertyData.ToString().Length }
+				    else
+				    {
+					    <text>0</text>
+				    }</td>
+						
+
+				@*//Has Value*@
+				<td>@PropertyHasValue(dtInfo,node, propertyAlias)</td>
+
+				@*//Value Model Type
+							<td>@dtInfo.Property.GetValue().GetType().ToString()</td>*@
+
+				@*//Date Last Updated*@
+				<td>
+					@{
+						Html.RenderPartial("/App_Plugins/Dragonfly.SiteAuditor/RazorViews/DataFormats/DateValue.cshtml", node.UmbContentNode.UpdateDate);
+					}
+				</td>
+
+			</tr>
+		}
+
+		</tbody>
+		<tfoot>
+		<tr>
+			<td>#</td>
+			<td>Actions</td>
+			<th>"@propertyAlias" Data Type</th>
+			<th>DocType</th>
+			<th>Node ID</th>
+			<th>Node Path</th>
+			<th>Is Published?</th>
+			<th>"@propertyAlias" Value</th>
+			<th> Value Length</th>
+			<th> Has Value</th>
+			@* <th>Value Model Type</th>*@
+			<th>Date Last Updated</th>
+		</tr>
+		</tfoot>
+	</table>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		// Setup - add a text input to each footer cell
+		$('#umbracodata tfoot th').each( function () {
+			var title = $(this).text();
+			$(this).html( '<input type="text" style="font-size:10px; width:100%;" placeholder="Search '+title+'" />' );
+		} );
+
+		// DataTable
+		$('#umbracodata').DataTable({
+			initComplete: function () {
+				// Apply the search
+				this.api().columns().every( function () {
+					var that = this;
+
+					$( 'input', this.footer() ).on( 'keyup change clear', function () {
+						if ( that.search() !== this.value ) {
+							that
+								.search( this.value )
+								.draw();
+						}
+					} );
+				} );
+			}
+		});
+
+	});
+</script>
+</body>
+</html>
+
+@functions{
+	bool PropertyHasValue(NodePropertyDataTypeInfo DtInfo, AuditableContent Node, string PropertyAlias)
+	{
+		if (DtInfo.PropertyData is null)
+		{
+			return false;
+		}
+
+		if (!Node.UmbContentNode.HasPropertyValue(PropertyAlias))
+		{
+			return false;
+		}
+
+		var editor = DtInfo.DataType.EditorAlias;
+		var valueString = DtInfo.PropertyData.ToString() is not null ? DtInfo.PropertyData.ToString() : "";
+
+		if (valueString is null)
+		{
+			return false;
+		}
+		else if (editor == "Umbraco.MediaPicker3" && valueString.Length < 3)
+		{
+			return false;
+		}
+		
+		//else
+		return true;
+	}
+}

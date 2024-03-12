@@ -1,0 +1,144 @@
+﻿<div class="DragonflyDashboard">
+    <div>
+        <div class="umb-editor-sub-header" umb-sticky-bar="">
+            <h3><localize key="SiteAuditor_SiteAuditor">Dragonfly Site Auditor</localize></h3>
+        </div>
+        <!--<h4><localize key="SiteAuditor_GetStarted">Get Started</localize></h4>-->
+        <!--<p class="mt3">
+            <localize key="SiteAuditor_Instructions">The Site Tester visits all the content pages on your site and reports errors.</localize>
+        </p>-->
+        <p>
+            <i>
+                <b><localize key="SiteAuditor_Note">NOTE:</localize></b>
+                <localize key="SiteAuditor_NoteDetails">
+                    Some of these will take a long time to run for large sites. Please be patient.<br />
+                    The HTML option is interactive and searchable.
+                </localize>
+            </i>
+        </p>
+        <!-- <p class="mt3">
+            <a href="/umbraco/backoffice/Dragonfly/SiteAuditor/Start" target="_blank" class="btn btn-success" style="text-decoration: none;">
+                <localize key="SiteAuditor_StartTestingButton">Start Testing / Review Past Test Results</localize>
+            </a>
+        </p>-->
+        <div class="umb-table">
+
+            <div class="umb-table-head">
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Entity</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1">HTML</div>
+                    <div class="umb-table-cell flx-s1 flx-g1">JSON</div>
+                    <div class="umb-table-cell flx-s1 flx-g1">CSV</div>
+                </div>
+            </div>
+
+            <div class="umb-table-body">
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">All Content Nodes</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllContentAsHtmlTable">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllContentAsJson">JSON</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllContentAsCsv">CSV</a></span></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Content Nodes For Doctype</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetContentForDoctypeHtml">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"></div>
+              <div class="umb-table-cell flx-s1 flx-g1"></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Content Nodes with Property Data</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetContentWithValues">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"></div>
+           <div class="umb-table-cell flx-s1 flx-g1"></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">All Document Types</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllDocTypesAsHtmlTable">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllDocTypesAsJson">JSON</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllDocTypesAsCsv">CSV</a></span></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">All DocType Properties</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllPropertiesAsHtmlTable">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllPropertiesAsJson">JSON</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllPropertiesAsCsv">CSV</a></span></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Single DocType's Properties</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetPropertiesForDoctypeHtml">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"></div>
+            <div class="umb-table-cell flx-s1 flx-g1"></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">All DataTypes</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllDataTypesAsHtmlTable">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllDataTypesAsJson">JSON</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllDataTypesAsCsv">CSV</a></span></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">All Templates</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllTemplatesAsHtmlTable">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllTemplatesAsJson">JSON</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/GetAllTemplatesAsCsv">CSV</a></span></div>
+                </div>
+
+                <div class="umb-table-row">
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Template Usage</div>
+                    <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"><small>Qty of Pages Using Templates + Templates Not In Use</small></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs"><a target="_blank" href="/umbraco/backoffice/Dragonfly/SiteAuditor/TemplateUsageReport">HTML</a></span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"></div>
+               <div class="umb-table-cell flx-s1 flx-g1"></div>
+                </div>
+                <!--
+            <div class="umb-table-row">
+                <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Entity</div>
+                <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">HTML</span></div>
+                <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">JSON</span></div>
+                    <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">CSV</span></div>
+            </div>
+
+            <div class="umb-table-row">
+                <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Entity</div>
+                <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">HTML</span></div>
+                <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">JSON</span></div>
+                 <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">CSV</span></div>
+            </div>
+
+            <div class="umb-table-row">
+                <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b2">Entity</div>
+                <div class="umb-table-cell not-fixed flx-s1 flx-g1 flx-b3"></div>
+                <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">HTML</span></div>
+                <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">JSON</span></div>
+                  <div class="umb-table-cell flx-s1 flx-g1"><span class="btn btn-default umb-button--xs">CSV</span></div>
+            </div>
+    -->
+            </div>
+
+        </div>
+
+    </div>
+ 
+    <p class="mt5">
+        <small><localize key="SiteAuditor_MoreInfo">For more information and updates</localize> : <a href="https://github.com/hfloyd/Dragonfly.Umbraco10.SiteAuditor" target="_blank">Dragonfly.Umbraco10.SiteAuditor</a> </small>
+    </p>
+</div>
+

@@ -1,0 +1,57 @@
+@inherits UmbracoViewPage<IProperty>
+
+@{
+	var value = Model.GetValue(); //Should be a collection of UDI strings
+	var udis = new List<Udi>();
+
+	if (value != null)
+	{
+		if (value.ToString().Contains(","))
+		{
+			//Multiple items
+			var values = value.ToString().Split(',');
+			foreach (var val in values)
+			{
+				udis.Add(UdiParser.Parse(val));
+			}
+		}
+		else
+		{
+			//Single item
+			udis.Add(UdiParser.Parse(value.ToString()));
+		}
+
+		if (udis.Any())
+		{
+			<ol>
+				@foreach (var udi in udis)
+				{
+					var item = Umbraco.Content(udi);
+					<li>
+
+						@if (item != null)
+						{
+							<span>@item.Name (@item.ContentType.Alias)</span>
+							<br />
+
+							<small>@udi.ToString()</small>
+						}
+						else
+						{
+							<span>[Unpublished Node]</span>
+							<br />
+
+							<small>@udi.ToString()</small>
+						}
+					</li>
+				}
+			</ol>
+		}
+	}
+	else
+	{
+		<i>(No items selected)</i>
+	}
+}
+
+

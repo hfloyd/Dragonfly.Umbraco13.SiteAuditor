@@ -1,0 +1,9 @@
+﻿@inherits UmbracoViewPage<IProperty>
+@{
+	var value = Model.GetValue();
+
+    <textarea rows="10" cols="100"> 
+        @value
+    </textarea>
+}
+

@@ -1,0 +1,29 @@
+
+@inherits UmbracoViewPage<Int32>
+@{
+    var entityId = Model;
+    var type = Mvc.GetSafeViewDataString(this.ViewData,"EntityType");
+    var linkTitle = Mvc.GetSafeViewDataString(this.ViewData,"LinkTitle", "Edit");
+
+    var url = "";
+    switch (type)
+    {
+        case "DataType":
+            url = $"/umbraco/#/settings/dataTypes/edit/{entityId}";
+            break;
+
+        case "DocType":
+            url = $"/umbraco/#/settings/documentTypes/edit/{entityId}";
+            break;
+            
+        case "Template":
+            url = $"/umbraco/#/settings/templates/edit/{entityId}";
+            break;
+    }
+    
+}
+@if (entityId != 0)
+{
+    <a href="@url" target="_blank">@linkTitle</a>
+}
+

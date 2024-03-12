@@ -1,0 +1,14 @@
+@inherits UmbracoViewPage<NodePropertyDataTypeInfo>
+@{
+    NodePropertyDataTypeInfo propInfo = Model;
+}
+@if (propInfo != null)
+{
+    var name = propInfo.DataType != null ? propInfo.DataType.Name : "NULL DataType!";
+	<span>@name (@propInfo.PropertyEditorAlias [@propInfo.DatabaseType])</span>
+    @if (propInfo.DataType is null)
+    {
+	    <small>@propInfo.ErrorMessage</small>
+    }
+}
+

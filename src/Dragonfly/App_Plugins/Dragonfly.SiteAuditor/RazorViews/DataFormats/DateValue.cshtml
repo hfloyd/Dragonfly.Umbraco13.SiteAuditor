@@ -1,0 +1,10 @@
+@inherits UmbracoViewPage<DateTime>
+    
+@if (Model != DateTime.MinValue)
+{
+    <span>@Model.ToString("g")</span>
+}
+@*else
+{
+    <span> N/A </span>
+}*@

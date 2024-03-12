@@ -1,0 +1,44 @@
+@inherits UmbracoViewPage<IEnumerable<string>>
+@{
+	var fancyFormat = Mvc.GetSafeViewDataBool(ViewData, "FancyFormat", true);
+    var tagFilterName = Mvc.GetSafeViewDataString(ViewData, "TagFilterName", "TagFilter");
+
+	var requestUri = Dragonfly.NetHelpers.Urls.CurrentRequestUri(Context.Request);
+
+//	var propertyData = Model;
+//	var tagData = propertyData.Value<IEnumerable<string>>(null).ToList();
+	var tagData = Model;
+
+    if (tagData != null && tagData.Any())
+    {
+        if (fancyFormat)
+        {
+            foreach (var tag in tagData)
+            {
+                var tagUrl = Dragonfly.NetHelpers.Urls.AppendQueryStringToUrl(requestUri, tagFilterName, tag);
+
+                <a href="@tagUrl"><span class="label label-primary">@tag</span></a>
+            }
+        }
+        else
+        {
+            <span>@string.Join(", ", tagData)</span>
+        }
+
+    }
+    else
+    {
+        if (fancyFormat)
+        {
+            var tagUrl = Dragonfly.NetHelpers.Urls.AppendQueryStringToUrl(requestUri, tagFilterName, "none");
+
+            <a href="@tagUrl"><span class="label label-default">none</span></a>
+        }
+        else
+        {
+            <i>none</i>
+        }
+    }
+}
+
+
