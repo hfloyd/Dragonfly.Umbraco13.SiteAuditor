@@ -3,25 +3,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dragonfly.NetModels;
-using Dragonfly.SiteAuditor.Models;
-using Dragonfly.UmbracoServices;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
-//	using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Extensions;
 
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
+using Dragonfly.NetModels;
+using Dragonfly.SiteAuditor.Models;
+using Dragonfly.UmbracoServices;
 
 public class SiteAuditorService
 {

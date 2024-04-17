@@ -10,12 +10,12 @@
         /// <summary>
         /// Gets the alias of the package.
         /// </summary>
-        public const string Alias = "Dragonfly.Umbraco10.SiteAuditor";
+        public const string Alias = "Dragonfly.Umbraco13.SiteAuditor";
 
         /// <summary>
         /// Gets the friendly name of the package.
         /// </summary>
-        public const string Name = "Dragonfly Site Auditor (for Umbraco 10)";
+        public const string Name = "Dragonfly Site Auditor (for Umbraco 13)";
 
         /// <summary>
         /// Gets the version of the package.
@@ -25,17 +25,17 @@
         /// <summary>
         /// Gets the URL of the GitHub repository for this package.
         /// </summary>
-        public const string GitHubUrl = "https://github.com/hfloyd/Dragonfly.Umbraco10.SiteAuditor";
+        public const string GitHubUrl = "https://github.com/hfloyd/Dragonfly.Umbraco13.SiteAuditor";
 
         /// <summary>
         /// Gets the URL of the issue tracker for this package.
         /// </summary>
-        public const string IssuesUrl = "https://github.com/hfloyd/Dragonfly.Umbraco10.SiteAuditor/issues";
+        public const string IssuesUrl = "https://github.com/hfloyd/Dragonfly.Umbraco13.SiteAuditor/issues";
 
         /// <summary>
         /// Gets the URL of the documentation for this package.
         /// </summary>
-        public const string DocumentationUrl = "https://github.com/hfloyd/Dragonfly.Umbraco10.SiteAuditor#documentation";
+        public const string DocumentationUrl = "https://github.com/hfloyd/Dragonfly.Umbraco13.SiteAuditor#documentation";
 
 
 

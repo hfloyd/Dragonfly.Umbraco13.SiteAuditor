@@ -7,11 +7,11 @@
 	using System.Threading.Tasks;
 	using Dragonfly.SiteAuditor.Models;
 	using Dragonfly.UmbracoServices;
-	using Lucene.Net.Analysis.CharFilters;
+
 	using Microsoft.AspNetCore.Html;
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.Extensions.Logging;
-	using Umbraco.Cms.Core;
+
 	using Umbraco.Cms.Core.Hosting;
 	using Umbraco.Cms.Core.Models;
 	using Umbraco.Cms.Core.Models.Membership;
