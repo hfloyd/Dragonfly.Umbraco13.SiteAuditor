@@ -20,7 +20,7 @@ using Umbraco.Extensions;
 
 using Dragonfly.NetModels;
 using Dragonfly.SiteAuditor.Models;
-using Dragonfly.UmbracoServices;
+using Dragonfly.NetHelperServices;
 
 public class SiteAuditorService
 {

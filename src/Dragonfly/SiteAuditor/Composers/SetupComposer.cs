@@ -25,7 +25,7 @@ namespace Dragonfly.SiteAuditor.Composers
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddScoped<IViewRenderService, Dragonfly.NetHelperServices.ViewRenderService>();
-            builder.Services.AddScoped<Dragonfly.UmbracoServices.FileHelperService>();
+            builder.Services.AddScoped<Dragonfly.NetHelperServices.FileHelperService>();
 
             builder.Services.AddScoped<Dragonfly.SiteAuditor.Services.DependencyLoader>();
             builder.Services.AddScoped<Dragonfly.SiteAuditor.Services.SiteAuditorService>();

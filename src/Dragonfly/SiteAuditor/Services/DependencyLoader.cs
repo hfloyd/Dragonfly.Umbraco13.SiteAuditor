@@ -1,6 +1,6 @@
 ﻿namespace Dragonfly.SiteAuditor.Services
 {
-    using Dragonfly.UmbracoServices;
+	using Dragonfly.NetHelperServices;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
     using Umbraco.Cms.Core.Hosting;

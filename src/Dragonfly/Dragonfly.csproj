@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
 		<ContentTargetFolders>content</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -8,18 +8,18 @@
 
 	<!-- Package Description-->
 	<PropertyGroup>
-		<PackageId>Dragonfly.Umbraco10.SiteAuditor</PackageId>
-		<Title>Dragonfly Umbraco 10 Site Auditor</Title>
-		<Product>Dragonfly Umbraco 10 Site Auditor</Product>
-		<Description>A collection of tools to extract data about an Umbraco 10 site. (min. Umbraco 10.0)</Description>
+		<PackageId>Dragonfly.Umbraco13.SiteAuditor</PackageId>
+		<Title>Dragonfly Umbraco 13 Site Auditor</Title>
+		<Product>Dragonfly Umbraco Site Auditor</Product>
+		<Description>A collection of tools to extract data about an Umbraco 13 site. (min. Umbraco 13.0)</Description>
 
 		<PackageProjectUrl>https://DragonflyLibraries.com/umbraco-packages/site-auditor/</PackageProjectUrl>
 		<RepositoryType>GIT</RepositoryType>
-		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco10.SiteAuditor</RepositoryUrl>
+		<RepositoryUrl>https://github.com/hfloyd/Dragonfly.Umbraco13.SiteAuditor</RepositoryUrl>
 
 		<PackageIcon>Dragonfly-SiteAuditor-128.png</PackageIcon>
-		<PackageTags>Umbraco;umbraco-marketplace;Umbraco-10;Umbraco-11;Umbraco-12</PackageTags>
-		<PackageReleaseNotes>Enhancements to 'TemplateUsageReport'</PackageReleaseNotes>
+		<PackageTags>Umbraco;umbraco-marketplace;Umbraco-13</PackageTags>
+		<PackageReleaseNotes>Updated to use 'Dragonfly.Net6' dependency</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<!-- Author Info + Legal-->
@@ -37,7 +37,7 @@
 	<PropertyGroup>
 		<RootNamespace>Dragonfly</RootNamespace>
 		<AssemblyName>Dragonfly.UmbracoSiteAuditor</AssemblyName>
-		<Version>1.3.4</Version>
+		<Version>2.0.0</Version>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
 		<IncludeSymbols>True</IncludeSymbols>
@@ -63,11 +63,11 @@
 
 	<!-- Packages-->
 	<ItemGroup>
-		<PackageReference Include="Dragonfly.Net5" Version="1.5.0" />
-		<PackageReference Include="Dragonfly.Umbraco9" Version="1.5.0" />
-		<PackageReference Include="Umbraco.Cms.Core" Version="[10.0.1,14.0.0]" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.1,14.0.0]" PrivateAssets="All" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.1,14.0.0]" PrivateAssets="All" />
+		<PackageReference Include="Dragonfly.Net6" Version="1.0.0" />
+		<PackageReference Include="Dragonfly.Umbraco13" Version="1.5.0" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,14.0.0]" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0,14.0.0]" PrivateAssets="All" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0,14.0.0]" PrivateAssets="All" />
 
 	</ItemGroup>
 	

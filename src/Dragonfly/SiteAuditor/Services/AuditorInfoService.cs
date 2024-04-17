@@ -6,7 +6,7 @@
 	using System.Text;
 	using System.Threading.Tasks;
 	using Dragonfly.SiteAuditor.Models;
-	using Dragonfly.UmbracoServices;
+	using Dragonfly.NetHelperServices;
 
 	using Microsoft.AspNetCore.Html;
 	using Microsoft.AspNetCore.Http;
