@@ -3,7 +3,7 @@
 A collection of tools to extract data about an Umbraco 13 site created by [Heather Floyd](https://www.HeatherFloyd.com).
 
 
-[![Dragonfly Website](https://img.shields.io/badge/Dragonfly-Website-A84492)](https://DragonflyLibraries.com/umbraco-packages/site-auditor/) [![Umbraco Marketplace](https://img.shields.io/badge/Umbraco-Marketplace-3544B1?logo=Umbraco&logoColor=white)](https://marketplace.umbraco.com/package/Dragonfly.Umbraco13.SiteAuditor) [![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco13.SiteAuditor)](https://www.nuget.org/packages/Dragonfly.Umbraco10.SiteAuditor/) [![GitHub](https://img.shields.io/badge/GitHub-Sourcecode-blue?logo=github)](https://github.com/hfloyd/Dragonfly.Umbraco13.SiteAuditor)
+[![Dragonfly Website](https://img.shields.io/badge/Dragonfly-Website-A84492)](https://DragonflyLibraries.com/umbraco-packages/site-auditor/) [![Umbraco Marketplace](https://img.shields.io/badge/Umbraco-Marketplace-3544B1?logo=Umbraco&logoColor=white)](https://marketplace.umbraco.com/package/Dragonfly.Umbraco13.SiteAuditor) [![Nuget Downloads](https://buildstats.info/nuget/Dragonfly.Umbraco13.SiteAuditor)](https://www.nuget.org/packages/Dragonfly.Umbraco13.SiteAuditor/) [![GitHub](https://img.shields.io/badge/GitHub-Sourcecode-blue?logo=github)](https://github.com/hfloyd/Dragonfly.Umbraco13.SiteAuditor)
 
 
 ## Versions ##
